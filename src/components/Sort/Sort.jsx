@@ -1,6 +1,18 @@
+import { useState } from "react";
+
 const Sort = () => {
+    const sortArr = ["популярности", "цене", "алфавиту"];
+
+    const [isVisible, setIsVisible] = useState(false);
+    const [activeSort, setActiveSort] = useState(sortArr[0]);
+
+    const onSelectActiveSort = (sort) => {
+        setActiveSort(sort);
+        setIsVisible(false);
+    };
+
     return (
-        <div className="sort">
+        <div className="sort" onMouseEnter={() => setIsVisible(true)}>
             <div className="sort__label">
                 <svg
                     width="10"
@@ -15,15 +27,28 @@ const Sort = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span>популярности</span>
+                <span>{activeSort}</span>
             </div>
-            <div className="sort__popup">
-                <ul>
-                    <li className="active">популярности</li>
-                    <li>цене</li>
-                    <li>алфавиту</li>
-                </ul>
-            </div>
+            {isVisible && (
+                <div
+                    className="sort__popup"
+                    onMouseLeave={() => setIsVisible(false)}
+                >
+                    <ul>
+                        {sortArr.map((item) => (
+                            <li
+                                key={item}
+                                className={
+                                    activeSort === item ? "active" : null
+                                }
+                                onClick={() => onSelectActiveSort(item)}
+                            >
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };
