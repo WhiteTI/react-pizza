@@ -1,8 +1,10 @@
 import PizzaBlock from "../PizzaBlock/PizzaBlock.jsx";
 import { useEffect, useState } from "react";
+import PizzaBlockSkeleton from "../Skeleton/PizzaBlockSkeleton.jsx";
 
 const PizzaBlocksList = () => {
     const [pizzas, setPizzas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     async function fetchPizzas() {
         try {
@@ -12,6 +14,7 @@ const PizzaBlocksList = () => {
 
             const data = await response.json();
             setPizzas(data);
+            setIsLoading(false);
         } catch (e) {
             console.log(e);
         }
@@ -25,7 +28,15 @@ const PizzaBlocksList = () => {
         <PizzaBlock key={id} {...props} />
     ));
 
-    return <>{elements}</>;
+    const skeletons = () => {
+        const arr = [];
+        for (let i = 0; i < 10; i++) {
+            arr.push(<PizzaBlockSkeleton key={i} />);
+        }
+        return arr;
+    };
+
+    return <>{isLoading ? skeletons() : elements}</>;
 };
 
 export default PizzaBlocksList;

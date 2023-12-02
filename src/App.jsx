@@ -1,25 +1,31 @@
-import "./scss/app.scss";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import Header from "./components/Header/Header.jsx";
-import Categories from "./components/Categories/Categories.jsx";
-import Sort from "./components/Sort/Sort.jsx";
-import PizzaBlocksList from "./components/PizzaBlocksList/PizzaBlocksList.jsx";
+
+import "./scss/app.scss";
+import MainPage from "./components/pages/MainPage.jsx";
+import CartPage from "./components/pages/CartPage.jsx";
+import NotFound from "./components/pages/NotFound.jsx";
 
 function App() {
     return (
         <div className="wrapper">
-            <Header />
-            <div className="content">
-                <div className="container">
-                    <div className="content__top">
-                        <Categories />
-                        <Sort />
-                    </div>
-                    <h2 className="content__title">Все пиццы</h2>
-                    <div className="content__items">
-                        <PizzaBlocksList />
-                    </div>
-                </div>
-            </div>
+            <Router>
+                <Header />
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<MainPage />}
+                        errorElement={<NotFound />}
+                    />
+                    <Route
+                        path="/cart"
+                        element={<CartPage />}
+                        errorElement={<NotFound />}
+                    />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Router>
         </div>
     );
 }
