@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { FilterAndSortContext } from "../../context/index.js";
 
 const Sort = () => {
-    const sortArr = ["популярности", "цене", "алфавиту"];
+    const sortArr = [
+        { name: "rating", value: "популярности" },
+        { name: "price", value: "цене" },
+        { name: "title", value: "алфавиту" },
+    ];
 
     const [isVisible, setIsVisible] = useState(false);
-    const [activeSort, setActiveSort] = useState(sortArr[0]);
 
-    const onSelectActiveSort = (sort) => {
-        setActiveSort(sort);
+    const { sort, setSort } = useContext(FilterAndSortContext);
+
+    const onSelectSort = (activeSort) => {
+        setSort(activeSort);
         setIsVisible(false);
     };
 
@@ -27,7 +33,7 @@ const Sort = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span>{activeSort}</span>
+                <span>{sort.value}</span>
             </div>
             {isVisible && (
                 <div
@@ -35,15 +41,15 @@ const Sort = () => {
                     onMouseLeave={() => setIsVisible(false)}
                 >
                     <ul>
-                        {sortArr.map((item) => (
+                        {sortArr.map((obj, index) => (
                             <li
-                                key={item}
+                                key={index}
                                 className={
-                                    activeSort === item ? "active" : null
+                                    sort.name === obj.name ? "active" : null
                                 }
-                                onClick={() => onSelectActiveSort(item)}
+                                onClick={() => onSelectSort(obj)}
                             >
-                                {item}
+                                {obj.value}
                             </li>
                         ))}
                     </ul>

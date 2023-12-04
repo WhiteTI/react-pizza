@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { FilterAndSortContext } from "../../context/index.js";
 
 const Categories = () => {
-    const [active, setActive] = useState(0);
+    const { category, setCategory } = useContext(FilterAndSortContext);
 
     const pizzaCategories = [
         "Все",
@@ -13,14 +14,14 @@ const Categories = () => {
     ];
 
     const onSelectCategory = (id) => {
-        setActive(id);
+        setCategory(id);
     };
 
     const elements = pizzaCategories.map((pizzaCategory, index) => (
         <li
             key={pizzaCategory}
             onClick={() => onSelectCategory(index)}
-            className={active === index ? "active" : ""}
+            className={category === index ? "active" : ""}
         >
             {pizzaCategory}
         </li>

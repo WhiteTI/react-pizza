@@ -1,28 +1,26 @@
 import PizzaBlock from "../PizzaBlock/PizzaBlock.jsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PizzaBlockSkeleton from "../Skeleton/PizzaBlockSkeleton.jsx";
+import usePizzaService from "../../sevices/usePizzaService.js";
+import { FilterAndSortContext } from "../../context/index.js";
 
 const PizzaBlocksList = () => {
     const [pizzas, setPizzas] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { sort, category } = useContext(FilterAndSortContext);
 
-    async function fetchPizzas() {
-        try {
-            const response = await fetch(
-                "https://6569fc73de53105b0dd7fcbe.mockapi.io/items",
-            );
-
-            const data = await response.json();
-            setPizzas(data);
-            setIsLoading(false);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    const { isLoading, setIsLoading, getAllPizzas } = usePizzaService();
 
     useEffect(() => {
-        fetchPizzas();
+        getAllPizzas()
+            .then((data) => setPizzas(data))
+            .then(() => setIsLoading(false));
     }, []);
+
+    useEffect(() => {
+        getAllPizzas(sort, category)
+            .then((data) => setPizzas(data))
+            .then(() => setIsLoading(false));
+    }, [sort, category]);
 
     const elements = pizzas.map(({ id, ...props }) => (
         <PizzaBlock key={id} {...props} />
