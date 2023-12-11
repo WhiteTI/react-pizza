@@ -1,8 +1,9 @@
-import { useContext } from "react";
-import { FilterAndSortContext } from "../../context/index.js";
+import { useDispatch, useSelector } from "react-redux";
+import { activeCategoryChanged } from "../../slices/filterSlice.js";
 
 const Categories = () => {
-    const { category, setCategory } = useContext(FilterAndSortContext);
+    const { category } = useSelector((state) => state.filter);
+    const dispatch = useDispatch();
 
     const pizzaCategories = [
         "Все",
@@ -14,7 +15,7 @@ const Categories = () => {
     ];
 
     const onSelectCategory = (id) => {
-        setCategory(id);
+        dispatch(activeCategoryChanged(id));
     };
 
     const elements = pizzaCategories.map((pizzaCategory, index) => (

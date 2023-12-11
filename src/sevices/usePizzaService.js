@@ -16,11 +16,18 @@ const usePizzaService = () => {
         }
     };
 
-    const getAllPizzas = async (sort = { name: "rating" }, category = 0) => {
+    const getAllPizzas = async (
+        sort = { name: "rating" },
+        category = 0,
+        order = false,
+        page = 1,
+    ) => {
+        sort = sort.name;
+        order = order ? "desc" : "asc";
+        category = category === 0 ? "" : `&category=${category}`;
+
         return await request(
-            `${_apiBase}?category=${category === 0 ? "" : category}&sortBy=${
-                sort.name
-            }&order=desc`,
+            `${_apiBase}?page=${page}&limit=4&sortBy=${sort}&order=${order}${category}`,
         );
     };
 

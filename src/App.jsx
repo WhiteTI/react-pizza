@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useState } from "react";
-import { FilterAndSortContext as Context } from "./context/index.js";
+import { PizzaContext as Context } from "./context/index.js";
 
 import Header from "./components/Header/Header.jsx";
 import MainPage from "./components/pages/MainPage.jsx";
@@ -10,17 +10,17 @@ import NotFound from "./components/pages/NotFound.jsx";
 import "./scss/app.scss";
 
 function App() {
-    const [sort, setSort] = useState({ name: "rating", value: "популярности" });
-    const [category, setCategory] = useState(0);
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
     return (
         <div className="wrapper">
             <Context.Provider
                 value={{
-                    sort,
-                    setSort,
-                    category,
-                    setCategory,
+                    search,
+                    setSearch,
+                    page,
+                    setPage,
                 }}
             >
                 <Router>

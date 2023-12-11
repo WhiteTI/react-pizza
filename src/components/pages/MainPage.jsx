@@ -1,6 +1,7 @@
 import Categories from "../Categories/Categories.jsx";
 import Sort from "../Sort/Sort.jsx";
 import PizzaBlocksList from "../PizzaBlocksList/PizzaBlocksList.jsx";
+import Pagination from "../Pagination/Pagination.jsx";
 
 const MainPage = () => {
     return (
@@ -14,6 +15,7 @@ const MainPage = () => {
                 <div className="content__items">
                     <PizzaBlocksList />
                 </div>
+                <Pagination />
             </div>
         </div>
     );
