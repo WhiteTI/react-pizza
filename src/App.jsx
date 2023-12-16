@@ -11,7 +11,6 @@ import "./scss/app.scss";
 
 function App() {
     const [search, setSearch] = useState("");
-    const [page, setPage] = useState(1);
 
     return (
         <div className="wrapper">
@@ -19,25 +18,25 @@ function App() {
                 value={{
                     search,
                     setSearch,
-                    page,
-                    setPage,
                 }}
             >
                 <Router>
                     <Header />
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={<MainPage />}
-                            errorElement={<NotFound />}
-                        />
-                        <Route
-                            path="/cart"
-                            element={<CartPage />}
-                            errorElement={<NotFound />}
-                        />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
+                    <div className="content">
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<MainPage />}
+                                errorElement={<NotFound />}
+                            />
+                            <Route
+                                path="/cart"
+                                element={<CartPage />}
+                                errorElement={<NotFound />}
+                            />
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </div>
                 </Router>
             </Context.Provider>
         </div>

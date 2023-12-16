@@ -1,40 +1,41 @@
 import { useState } from "react";
+import axios from "axios";
 
 const usePizzaService = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const _apiBase = "https://6569fc73de53105b0dd7fcbe.mockapi.io/items";
+    const url = new URL("https://6569fc73de53105b0dd7fcbe.mockapi.io/items");
+    url.searchParams.append("limit", "4");
 
     const request = async (url) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(url);
+            const response = await axios.get(url);
 
-            return await response.json();
+            return await response;
         } catch (e) {
             console.log(e);
         }
     };
 
-    const getAllPizzas = async (
+    const getPizzas = async (
         sort = { name: "rating" },
         category = 0,
         order = false,
         page = 1,
     ) => {
-        sort = sort.name;
-        order = order ? "desc" : "asc";
-        category = category === 0 ? "" : `&category=${category}`;
+        url.searchParams.set("page", page);
+        url.searchParams.set("sortBy", sort.name);
+        url.searchParams.set("order", order ? "desc" : "asc");
+        category !== 0 ? url.searchParams.set("category", category) : null;
 
-        return await request(
-            `${_apiBase}?page=${page}&limit=4&sortBy=${sort}&order=${order}${category}`,
-        );
+        return await request(url);
     };
 
     return {
         isLoading,
         setIsLoading,
-        getAllPizzas,
+        getPizzas,
     };
 };
 

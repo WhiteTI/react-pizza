@@ -5,6 +5,7 @@ const initialState = filterAdapter.getInitialState({
     category: 0,
     sort: { name: "rating", value: "популярности" },
     order: false,
+    page: 1,
 });
 
 const filterSlice = createSlice({
@@ -20,11 +21,18 @@ const filterSlice = createSlice({
         activeOrderChanged: (state) => {
             state.order = !state.order;
         },
+        activePageChanged: (state, action) => {
+            state.page = action.payload;
+        },
     },
 });
 
 const { actions, reducer } = filterSlice;
 
 export default reducer;
-export const { activeCategoryChanged, activeOrderChanged, activeSortChanged } =
-    actions;
+export const {
+    activeCategoryChanged,
+    activeOrderChanged,
+    activeSortChanged,
+    activePageChanged,
+} = actions;

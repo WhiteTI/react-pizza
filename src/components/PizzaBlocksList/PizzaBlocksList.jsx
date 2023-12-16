@@ -8,21 +8,25 @@ import { useSelector } from "react-redux";
 const PizzaBlocksList = () => {
     const [pizzas, setPizzas] = useState([]);
     const [searchedPizzas, setSearchedPizzas] = useState([]);
-    const { search, page } = useContext(PizzaContext);
+    const { search } = useContext(PizzaContext);
 
-    const { isLoading, setIsLoading, getAllPizzas } = usePizzaService();
+    const { isLoading, setIsLoading, getPizzas } = usePizzaService();
 
-    const { category, order, sort } = useSelector((state) => state.filter);
+    const { category, order, sort, page } = useSelector(
+        (state) => state.filter,
+    );
 
     useEffect(() => {
-        getAllPizzas()
-            .then((data) => setPizzas(data))
+        getPizzas()
+            .then((res) => setPizzas(res.data))
             .then(() => setIsLoading(false));
     }, []);
 
     useEffect(() => {
-        getAllPizzas(sort, category, order, page)
-            .then((data) => setPizzas(data))
+        getPizzas(sort, category, order, page)
+            .then((res) => {
+                setPizzas(res.data);
+            })
             .then(() => setIsLoading(false));
     }, [sort, category, order, page]);
 
@@ -38,7 +42,7 @@ const PizzaBlocksList = () => {
     };
 
     const elements = searchedPizzas.map(({ id, ...props }) => (
-        <PizzaBlock key={id} {...props} />
+        <PizzaBlock key={id} id={id} {...props} />
     ));
 
     const skeletons = () => {

@@ -1,11 +1,44 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addPizza } from "../../slices/cartSlice.js";
 
 // eslint-disable-next-line react/prop-types
-const PizzaBlock = ({ imageUrl, title, price, sizes, types }) => {
+const PizzaBlock = ({ imageUrl, title, price, sizes, types, id }) => {
     const [activeType, setActiveType] = useState(0);
     const [activeSize, setActiveSize] = useState(0);
 
+    const { items } = useSelector((state) => state.cart);
+
     const typeNames = ["тонкое", "традиционное"];
+
+    const dispatch = useDispatch();
+
+    let pizzaId = `${id}` + activeType + activeSize;
+
+    const count = useMemo(() => {
+        if (!Object.values(items).length) return 0;
+
+        for (let [id, item] of Object.entries(items)) {
+            if (id === pizzaId) return item.count;
+        }
+
+        return 0;
+    }, [items, activeType, activeSize]);
+
+    const addPizzaToCart = () => {
+        const pizza = {
+            title,
+            activeType,
+            activeSize,
+            sizes,
+            price,
+            imageUrl,
+            count: 1,
+            index: id,
+        };
+
+        dispatch(addPizza(pizza));
+    };
 
     return (
         <div className="pizza-block-wrapper">
@@ -52,7 +85,12 @@ const PizzaBlock = ({ imageUrl, title, price, sizes, types }) => {
                 </div>
                 <div className="pizza-block__bottom">
                     <div className="pizza-block__price">от {price} ₽</div>
-                    <button className="button button--outline button--add">
+                    <button
+                        className="button button--outline button--add"
+                        onClick={() => {
+                            addPizzaToCart();
+                        }}
+                    >
                         <svg
                             width="12"
                             height="12"
@@ -66,7 +104,7 @@ const PizzaBlock = ({ imageUrl, title, price, sizes, types }) => {
                             />
                         </svg>
                         <span>Добавить</span>
-                        <i>0</i>
+                        <i>{count}</i>
                     </button>
                 </div>
             </div>

@@ -1,16 +1,19 @@
 import ReactPaginate from "react-paginate";
 import classes from "./Pagination.module.scss";
-import { useContext } from "react";
-import { PizzaContext } from "../../context/index.js";
+import { useDispatch } from "react-redux";
+import { activePageChanged } from "../../slices/filterSlice.js";
+
 const Pagination = () => {
-    const { setPage } = useContext(PizzaContext);
+    const dispatch = useDispatch();
 
     return (
         <ReactPaginate
             className={classes.root}
             breakLabel="..."
             nextLabel=">"
-            onPageChange={(event) => setPage(event.selected + 1)}
+            onPageChange={(event) =>
+                dispatch(activePageChanged(event.selected + 1))
+            }
             pageRangeDisplayed={4}
             pageCount={3}
             previousLabel="<"
