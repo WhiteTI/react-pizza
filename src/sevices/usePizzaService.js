@@ -1,18 +1,14 @@
-import { useState } from "react";
 import axios from "axios";
 
 const usePizzaService = () => {
-    const [isLoading, setIsLoading] = useState(false);
     const url = new URL("https://6569fc73de53105b0dd7fcbe.mockapi.io/items");
     url.searchParams.append("limit", "4");
 
     const request = async (url) => {
-        setIsLoading(true);
-
         try {
             const response = await axios.get(url);
 
-            return await response;
+            return await response.data;
         } catch (e) {
             console.log(e);
         }
@@ -33,8 +29,6 @@ const usePizzaService = () => {
     };
 
     return {
-        isLoading,
-        setIsLoading,
         getPizzas,
     };
 };

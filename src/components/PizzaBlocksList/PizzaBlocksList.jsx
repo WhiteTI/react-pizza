@@ -1,33 +1,28 @@
 import PizzaBlock from "../PizzaBlock/PizzaBlock.jsx";
 import { useContext, useEffect, useState } from "react";
 import PizzaBlockSkeleton from "../Skeleton/PizzaBlockSkeleton.jsx";
-import usePizzaService from "../../sevices/usePizzaService.js";
 import { PizzaContext } from "../../context/index.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPizzas } from "../../slices/pizzaSlice.js";
 
 const PizzaBlocksList = () => {
-    const [pizzas, setPizzas] = useState([]);
     const [searchedPizzas, setSearchedPizzas] = useState([]);
     const { search } = useContext(PizzaContext);
 
-    const { isLoading, setIsLoading, getPizzas } = usePizzaService();
+    const dispatch = useDispatch();
+
+    const { pizzas, pizzasLoadingStatus } = useSelector((state) => state.pizza);
 
     const { category, order, sort, page } = useSelector(
         (state) => state.filter,
     );
 
     useEffect(() => {
-        getPizzas()
-            .then((res) => setPizzas(res.data))
-            .then(() => setIsLoading(false));
+        dispatch(fetchPizzas());
     }, []);
 
     useEffect(() => {
-        getPizzas(sort, category, order, page)
-            .then((res) => {
-                setPizzas(res.data);
-            })
-            .then(() => setIsLoading(false));
+        dispatch(fetchPizzas([sort, category, order, page]));
     }, [sort, category, order, page]);
 
     useEffect(() => {
@@ -53,7 +48,7 @@ const PizzaBlocksList = () => {
         return arr;
     };
 
-    return <>{isLoading ? skeletons() : elements}</>;
+    return <>{pizzasLoadingStatus === "loading" ? skeletons() : elements}</>;
 };
 
 export default PizzaBlocksList;
